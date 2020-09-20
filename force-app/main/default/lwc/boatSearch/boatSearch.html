@@ -11,14 +11,21 @@
           </lightning-button>
         </slot>
         <p class="slds-var-p-horizontal_small">
-          <c-boat-search></c-boat-search>
+          <!-- boatSearchForm component goes here -->
+          <c-boat-search-form></c-boat-search-form>
         </p>
       </lightning-card>
     </lightning-layout-item>
     <!-- Bottom -->
     <lightning-layout-item size="12" class="slds-p-top_small slds-is-relative">
       <!-- Spinner goes here -->
+      <div if:false={isLoading} class="slds-is-relative">
+        <lightning-spinner alternative-text="Loading">          
+        </lightning-spinner>
+      </div>
       <!-- boatSearchResults goes here -->
+      <c-boat-search-results if:true={isLoading}>        
+      </c-boat-search-results>
       <!-- onloading={handleLoading} ondoneloading={handleDoneLoading} -->
     </lightning-layout-item>
   </lightning-layout>
