@@ -1,5 +1,11 @@
 // import BOATMC from the message channel
-import { LightningElement } from 'lwc';
+import { LightningElement, api } from 'lwc';
+import {
+  subscribe,
+  unsubscribe,
+  APPLICATION_SCOPE,
+  MessageContext
+} from 'lightning/messageService'
 import BOATMC from '@salesforce/messageChannels/BoatMessageChannel__c';
 // Declare the const LONGITUDE_FIELD for the boat's Longitude__s
 // Declare the const LATITUDE_FIELD for the boat's Latitude
