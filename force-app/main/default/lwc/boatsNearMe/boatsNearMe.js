@@ -1,6 +1,5 @@
 import { LightningElement, wire, api } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import getBoatTypes from '@salesforce/apex/BoatDataService.getBoatTypes';
 import getBoatsByLocation from '@salesforce/apex/BoatDataService.getBoatsByLocation';
 
 const LABEL_YOU_ARE_HERE = 'You are here!';
