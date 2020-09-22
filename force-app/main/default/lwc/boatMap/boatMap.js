@@ -1,5 +1,5 @@
 // import BOATMC from the message channel
-import { LightningElement, wire } from 'lwc';
+import { LightningElement, wire, api} from 'lwc';
 import { subscribe, APPLICATION_SCOPE, MessageContext } from 'lightning/messageService';
 import { getRecord } from 'lightning/uiRecordApi';
 import BOATMC from '@salesforce/messageChannel/BoatMessageChannel__c';
@@ -18,6 +18,7 @@ export default class BoatMap extends LightningElement {
 
   // Getter and Setter to allow for logic to run on recordId change
   // this getter must be public
+  @api
   get recordId() {
     return this.boatId;
   }
@@ -55,6 +56,10 @@ export default class BoatMap extends LightningElement {
   @wire(MessageContext)
   messageContext;
   
+  subscribeMC() {
+    this.subscription = subscribe(this.messageContext, BOATMC, (message) => { this.boatId = message.recordId }, { scope: APPLICATION_SCOPE });
+  }
+
   connectedCallback() {
     // recordId is populated on Record Pages, and this component
     // should not update when this component is on a record page.
@@ -62,12 +67,7 @@ export default class BoatMap extends LightningElement {
       return;
     }
     // Subscribe to the message channel to retrieve the recordID and assign it to boatId.
-    if (!this.subscription) {
-          this.subscription = subscribe(this.messageContext, BOATMC, (message) => {
-              this.boatId = message.recordId;
-          }, 
-          { scope: APPLICATION_SCOPE });
-        }
+    this.subscribeMC();
   }
 
   // Creates the map markers array with the current boat's location for the map.
