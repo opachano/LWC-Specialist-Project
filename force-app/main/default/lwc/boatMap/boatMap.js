@@ -1,16 +1,17 @@
 // import BOATMC from the message channel
-import { LightningElement } from 'lwc';
-import {
-  subscribe,
-  unsubscribe,
-  APPLICATION_SCOPE,
-  MessageContext
-} from 'lightning/messageService'
+import { LightningElement, wire } from 'lwc';
+import { subscribe, APPLICATION_SCOPE, MessageContext } from 'lightning/messageService';
+import { getRecord } from 'lightning/uiRecordApi';
 import BOATMC from '@salesforce/messageChannel/BoatMessageChannel__c';
+const LONGITUDE_FIELD = 'Boat__c.Geolocation__Longitude__s';
+const LATITUDE_FIELD = 'Boat__c.Geolocation__Latitude__s';
+const BOAT_FIELDS = [LONGITUDE_FIELD, LATITUDE_FIELD];
+
 // Declare the const LONGITUDE_FIELD for the boat's Longitude__s
 // Declare the const LATITUDE_FIELD for the boat's Latitude
 // Declare the const BOAT_FIELDS as a list of [LONGITUDE_FIELD, LATITUDE_FIELD];
 export default class BoatMap extends LightningElement {
+  
   // private
   subscription = null;
   boatId;
@@ -32,6 +33,10 @@ export default class BoatMap extends LightningElement {
 
   // Getting record's location to construct map markers using recordId
   // Wire the getRecord method using ('$boatId')
+  @wire(getRecord,{
+    recordId:'$recordId',
+    fields:BOAT_FIELDS
+  })
   wiredRecord({ error, data }) {
     // Error handling
     if (data) {
@@ -47,6 +52,9 @@ export default class BoatMap extends LightningElement {
   }
 
   // Runs when component is connected, subscribes to BoatMC
+  @wire(MessageContext)
+  messageContext;
+  
   connectedCallback() {
     // recordId is populated on Record Pages, and this component
     // should not update when this component is on a record page.
@@ -54,6 +62,12 @@ export default class BoatMap extends LightningElement {
       return;
     }
     // Subscribe to the message channel to retrieve the recordID and assign it to boatId.
+    if (!this.subscription) {
+          this.subscription = subscribe(this.messageContext, BOATMC, (message) => {
+              this.boatId = message.recordId;
+          }, 
+          { scope: APPLICATION_SCOPE });
+        }
   }
 
   // Creates the map markers array with the current boat's location for the map.
