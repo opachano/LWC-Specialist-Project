@@ -1,16 +1,25 @@
-import { LightningElement, wire } from 'lwc';
-import { getRecord } from 'lightning/uiRecordApi';
+import { LightningElement, wire, api } from 'lwc';
+import { getRecord, updateRecord } from 'lightning/uiRecordApi';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { subscribe, APPLICATION_SCOPE, MessageContext } from 'lightning/messageService';
+import getBoatsByLocation from '@salesforce/apex/BoatDataService.getBoatsByLocation';
+import { refreshApex } from '@salesforce/apex';
 import getBoats from '@salesforce/apex/BoatDataService.getBoats';
 
 const SUCCESS_TITLE = 'Success';
-const MESSAGE_SHIP_IT     = 'Ship it!';
-const SUCCESS_VARIANT     = 'success';
-const ERROR_TITLE   = 'Error';
+const MESSAGE_SHIP_IT = 'Ship it!';
+const SUCCESS_VARIANT = 'success';
+const ERROR_TITLE = 'Error';
 const ERROR_VARIANT = 'error';
+
 export default class BoatSearchResults extends LightningElement {
   selectedBoatId;
-  columns = [];
+  columns = [
+    { label: 'Name', fieldName: 'Name', editable: true },
+    { label: 'Length', fieldName: 'Length__c', type: 'number', editable: true },
+    { label: 'Price', fieldName: 'Price__c', type: 'currency', editable: true },
+    { label: 'Description', fieldName: 'Description__c', editable: true }
+  ];
   boatTypeId = '';
   boats;
   isLoading = false;
@@ -26,7 +35,10 @@ export default class BoatSearchResults extends LightningElement {
   
   // public function that updates the existing boatTypeId property
   // uses notifyLoading
-  searchBoats(boatTypeId) { }
+  searchBoats(boatTypeId) { 
+    this.boatTypeId = boatTypeId;
+    this.notifyLoading(this.isLoading);
+  }
   
   // this public function must refresh the boats asynchronously
   // uses notifyLoading
@@ -57,5 +69,7 @@ export default class BoatSearchResults extends LightningElement {
     //     .finally(() => {});
   }
   // Check the current value of isLoading before dispatching the doneloading or loading custom event
-  notifyLoading(isLoading) { }
+  notifyLoading(isLoading) { 
+    
+  }
 }
