@@ -1,7 +1,8 @@
-import { LightningElement, wire, api } from 'lwc';
+import { LightningElement, wire, api, track } from 'lwc';
 import { getRecord, updateRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import { subscribe, APPLICATION_SCOPE, MessageContext } from 'lightning/messageService';
+import { subscribe, APPLICATION_SCOPE, MessageContext, publish } from 'lightning/messageService';
+import BOATMC from '@salesforce/messageChannel/BoatMessageChannel__c';
 import getBoatsByLocation from '@salesforce/apex/BoatDataService.getBoatsByLocation';
 import { refreshApex } from '@salesforce/apex';
 import getBoats from '@salesforce/apex/BoatDataService.getBoats';
@@ -22,6 +23,7 @@ export default class BoatSearchResults extends LightningElement {
   ];
   boatTypeId = '';
   boats;
+  @track
   isLoading = false;
   
   // wired message context
@@ -58,6 +60,10 @@ export default class BoatSearchResults extends LightningElement {
   // Publishes the selected boat Id on the BoatMC.
   sendMessageService(boatId) { 
     // explicitly pass boatId to the parameter recordId
+    const message = {
+      recordId: boatId
+    };
+    publish(this.messageContext, BOATMC, message);
   }
   
   // This method must save the changes in the Boat Editor
@@ -97,6 +103,12 @@ export default class BoatSearchResults extends LightningElement {
   }
   // Check the current value of isLoading before dispatching the doneloading or loading custom event
   notifyLoading(isLoading) { 
-
+    if(!isLoading){
+      const loadingEvent = new CustomEvent('loading');
+      this.dispatchEvent(loadingEvent);
+    } else {
+      const doneLoadingEvent = new CustomEvent('doneloading');
+      this.dispatchEvent(doneLoadingEvent);
+    }
   }
 }
