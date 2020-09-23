@@ -3,7 +3,6 @@ import { getRecord, updateRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { subscribe, APPLICATION_SCOPE, MessageContext, publish } from 'lightning/messageService';
 import BOATMC from '@salesforce/messageChannel/BoatMessageChannel__c';
-import getBoatsByLocation from '@salesforce/apex/BoatDataService.getBoatsByLocation';
 import { refreshApex } from '@salesforce/apex';
 import getBoats from '@salesforce/apex/BoatDataService.getBoats';
 
