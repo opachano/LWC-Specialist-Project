@@ -77,7 +77,7 @@ export default class BoatDetailTabs extends NavigationMixin(LightningElement) {
           objectApiName: 'Boat__c',
           actionName: 'view'
       }
-  });
+    });
   }
   
   // Navigates back to the review list, and refreshes reviews component
