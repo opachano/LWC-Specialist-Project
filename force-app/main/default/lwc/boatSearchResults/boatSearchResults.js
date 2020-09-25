@@ -1,7 +1,7 @@
 import { LightningElement, wire, api, track } from 'lwc';
 import { getRecord, updateRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import { subscribe, APPLICATION_SCOPE, MessageContext, publish } from 'lightning/messageService';
+import { MessageContext, publish } from 'lightning/messageService';
 import BOATMC from '@salesforce/messageChannel/BoatMessageChannel__c';
 import { refreshApex } from '@salesforce/apex';
 import getBoats from '@salesforce/apex/BoatDataService.getBoats';
