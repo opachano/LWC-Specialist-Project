@@ -13,13 +13,13 @@ const ERROR_TITLE = 'Error';
 const ERROR_VARIANT = 'error';
 
 export default class BoatSearchResults extends LightningElement {
-  selectedBoatId;
   columns = [
     { label: 'Name', fieldName: 'Name', editable: true },
     { label: 'Length', fieldName: 'Length__c', type: 'number', editable: true },
     { label: 'Price', fieldName: 'Price__c', type: 'currency', editable: true },
     { label: 'Description', fieldName: 'Description__c', editable: true }
   ];
+  selectedBoatId;
   boatTypeId = '';
   boats;
   @track
@@ -51,7 +51,7 @@ export default class BoatSearchResults extends LightningElement {
   }
   
   // this function must update selectedBoatId and call sendMessageService
-  updateSelectedTile() { 
+  updateSelectedTile(event) { 
     this.selectedBoatId = event.detail.boatId;
     this.sendMessageService(this.selectedBoatId);
   }

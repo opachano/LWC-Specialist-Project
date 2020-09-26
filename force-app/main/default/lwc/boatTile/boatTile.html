@@ -7,7 +7,7 @@
       <h2 class="slds-truncate slds-text-heading_small">{boat.Contact__r.Name}</h2>
       <div class="slds-text-body_small">
         <lightning-formatted-number 
-          value="00.00" maximum-fraction-digits="2">{boat.Price__c}
+          value={boat.Price__c} maximum-fraction-digits="2">
         </lightning-formatted-number>
       </div>
       <div class="slds-text-body_small">{boat.Length__c}</div>
